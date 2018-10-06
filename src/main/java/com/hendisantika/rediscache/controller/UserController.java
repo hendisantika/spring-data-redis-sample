@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : redis-cache
@@ -31,6 +33,12 @@ public class UserController {
     public User getUser(Long id, String username, String password) {
         LOGGER.debug("Get User Request...");
         return userService.getUser(id, username, password);
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public List<User> getAllUsers() {
+        LOGGER.debug("Get All Users Request...");
+        return userService.getAllUsers();
     }
 
 }

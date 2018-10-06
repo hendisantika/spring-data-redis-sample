@@ -1,5 +1,10 @@
 package com.hendisantika.rediscache.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -12,45 +17,16 @@ import java.io.Serializable;
  * Time: 21.11
  * To change this template use File | Settings | File Templates.
  */
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class User implements Serializable {
     private static final long serialVersionUID = 4714012106558852332L;
 
     private Long id;
     private String username;
     private String password;
-
-    public User() {
-    }
-
-    public User(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }
 
