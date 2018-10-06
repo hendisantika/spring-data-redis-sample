@@ -10,3 +10,5 @@ Open your browser :
 
 `http://localhost:8080/user?id=1&username=naruto&password=123456`
 
+`http://localhost:8080/all`
+
