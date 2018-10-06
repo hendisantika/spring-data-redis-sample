@@ -5,6 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
@@ -22,9 +26,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Entity
 public class User implements Serializable {
     private static final long serialVersionUID = 4714012106558852332L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String username;
     private String password;
