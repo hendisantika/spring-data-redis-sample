@@ -2,6 +2,7 @@ package com.hendisantika.rediscache;
 
 import com.hendisantika.rediscache.entity.User;
 import com.hendisantika.rediscache.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,12 +18,15 @@ public class RedisCacheApplication extends SpringBootServletInitializer {
     }
 
 
-	public static void main(String[] args) {
-		SpringApplication.run(RedisCacheApplication.class, args);
-	}
+    @Autowired
+    UserRepository userRepository;
+
+    public static void main(String[] args) {
+        SpringApplication.run(RedisCacheApplication.class, args);
+    }
 
     @Bean
-    CommandLineRunner initData(UserRepository userRepository) {
+    CommandLineRunner initData() {
         return args -> {
             userRepository.save(new User(1L, "Uzumaki Naruto", "123456"));
             userRepository.save(new User(2L, "Uchiha Sasuke", "123456"));
