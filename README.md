@@ -12,3 +12,15 @@ Open your browser :
 
 `http://localhost:8080/all`
 
+### Screenshot
+
+Before Redis
+
+![Before Redis](img/before.png "Before Redis")
+
+After Redis
+
+![After Redis](img/after.png "After Redis")
+
+### Happy Coding!
+
