@@ -8,9 +8,9 @@ Run this command on your terminal : `mvn clean spring-boot:run`
 
 Open your browser :
 
-`http://localhost:8080/user?id=1&username=naruto&password=123456`
+`curl --location 'http://localhost:8081/users?page=0&size=2000'`
 
-`http://localhost:8080/all`
+`curl --location 'http://localhost:8081/users/1'`
 
 ### Screenshot
 
