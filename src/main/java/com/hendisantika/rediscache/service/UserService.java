@@ -2,10 +2,11 @@ package com.hendisantika.rediscache.service;
 
 import com.hendisantika.rediscache.entity.User;
 import com.hendisantika.rediscache.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,25 +23,23 @@ import java.util.List;
  */
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Cacheable(value = "userCache")
-    public User getUser(Long id, String username, String password) {
+    public User getUser(Long id) throws Exception {
         LOGGER.debug("No cache,find from db...id=" + id);
-        return new User(id, username, password);
+        return userRepository.findById(id).orElseThrow(() -> new Exception("User not found - with: " + id));
     }
 
     @Cacheable(value = "userListCache")
-    public List<User> getAllUsers() {
-        List<User> userList = userRepository.findAll();
+    public List<User> getAllUsers(PageRequest pageRequest) {
+        List<User> userList = userRepository.findAll(pageRequest);
         LOGGER.debug("No cache, find from db... user data = " + userList);
         return userList;
     }
-
-
 
 }

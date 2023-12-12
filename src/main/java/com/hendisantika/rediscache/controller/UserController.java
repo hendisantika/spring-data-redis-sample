@@ -2,12 +2,11 @@ package com.hendisantika.rediscache.controller;
 
 import com.hendisantika.rediscache.entity.User;
 import com.hendisantika.rediscache.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,22 +22,31 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public User getUser(Long id, String username, String password) {
+    @GetMapping(value = "{userId}")
+    public User getUser(@PathVariable("userId") Long userId) throws Exception {
         LOGGER.debug("Get User Request...");
-        return userService.getUser(id, username, password);
+        return userService.getUser(userId);
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<User> getAllUsers() {
+    @GetMapping
+    public List<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "100") int size,
+                                  @RequestParam(defaultValue = "id,desc") String[] sort) {
         LOGGER.debug("Get All Users Request...");
-        return userService.getAllUsers();
+        //create pagerequest object
+        PageRequest pageRequest = PageRequest.of(page, size);
+        //pass it to repos
+//        Page<User> pagingUser = userService.getAllUsers(pageRequest);
+        return userService.getAllUsers(pageRequest);
+        //pagingUser.hasContent(); -- to check pages are there or not
+//        return pagingUser.getContent();
     }
 
 }

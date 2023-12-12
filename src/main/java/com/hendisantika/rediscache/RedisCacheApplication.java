@@ -38,6 +38,10 @@ public class RedisCacheApplication extends SpringBootServletInitializer {
             userRepository.save(new User(8L, "Minato Namikaze", "123456"));
             userRepository.save(new User(9L, "Uzumaki Kushina", "123456"));
             userRepository.save(new User(10L, "Yamanaka Ino", "123456"));
+
+            for (int i = 0; i < 1_000_000; i++) {
+                userRepository.save(new User((long) i, "User" + i, "123456"));
+            }
         };
     }
 }
