@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-public class SpecificationUtil {
+public class SpecificationUtil<V> {
     public Specification<V> buildSpecification(List<String> filters) {
         return buildSpecification(filters, null);
     }

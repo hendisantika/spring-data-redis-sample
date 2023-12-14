@@ -3,6 +3,7 @@ package com.hendisantika.rediscache.service;
 import com.hendisantika.rediscache.entity.Province;
 import com.hendisantika.rediscache.repository.KabkotaRepository;
 import com.hendisantika.rediscache.repository.ProvinceRepository;
+import com.hendisantika.rediscache.util.SpecificationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
