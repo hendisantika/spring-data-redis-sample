@@ -1,10 +1,13 @@
 package com.hendisantika.rediscache.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,5 +39,24 @@ public class SpecificationUtil {
             }
         }
         return spec;
+    }
+
+    public PageRequest setPageableWithSort(
+            String orderAsc,
+            String orderDesc,
+            Integer pageIndex,
+            Integer size
+    ) {
+        pageIndex = Objects.nonNull(pageIndex) ? pageIndex : 0;
+        size = Objects.nonNull(size) ? size : 20;
+        if (Objects.nonNull(orderAsc)) {
+            String[] ordersSplitAsc = orderAsc.contains(",") ? orderAsc.split(",") : new String[]{orderAsc};
+            return PageRequest.of(pageIndex, size, Sort.by(ordersSplitAsc).ascending());
+        } else if (Objects.nonNull(orderDesc)) {
+            String[] ordersSplitDesc = orderDesc.contains(",") ? orderDesc.split(",") : new String[]{orderDesc};
+            return PageRequest.of(pageIndex, size, Sort.by(ordersSplitDesc).descending());
+        } else {
+            return PageRequest.of(pageIndex, size);
+        }
     }
 }
