@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -57,6 +58,74 @@ public class SpecificationUtil {
             return PageRequest.of(pageIndex, size, Sort.by(ordersSplitDesc).descending());
         } else {
             return PageRequest.of(pageIndex, size);
+        }
+    }
+
+    private String[] splitFilter(String filter) {
+        try {
+            if (filter.contains(CommonConstant.FilterOperators.LESS_THAN_OR_EQUALS)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.LESS_THAN_OR_EQUALS);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = CommonConstant.FilterOperators.LESS_THAN_OR_EQUALS;
+                result[2] = value;
+                return result;
+            } else if (filter.contains(CommonConstant.FilterOperators.GREATER_THAN_OR_EQUALS)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.GREATER_THAN_OR_EQUALS);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = CommonConstant.FilterOperators.GREATER_THAN_OR_EQUALS;
+                result[2] = value;
+                return result;
+            } else if (filter.contains(CommonConstant.FilterOperators.NOT_EQUALS)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.NOT_EQUALS);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = CommonConstant.FilterOperators.NOT_EQUALS;
+                result[2] = value;
+                return result;
+            } else if (filter.contains(CommonConstant.FilterOperators.FILTER_EQUALS)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.FILTER_EQUALS);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = value.startsWith("[") ?
+                        CommonConstant.FilterOperators.IN :
+                        value.contains("%") ?
+                                CommonConstant.FilterOperators.LIKE :
+                                CommonConstant.FilterOperators.FILTER_EQUALS;
+                result[2] = value;
+                return result;
+            } else if (filter.contains(CommonConstant.FilterOperators.LESS_THAN)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.LESS_THAN);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = CommonConstant.FilterOperators.LESS_THAN;
+                result[2] = value;
+                return result;
+            } else if (filter.contains(CommonConstant.FilterOperators.GREATER_THAN)) {
+                String[] splitStr = filter.split(CommonConstant.FilterOperators.GREATER_THAN);
+                String field = splitStr[0];
+                String value = splitStr[1];
+                String[] result = new String[splitStr.length + 1];
+                result[0] = field;
+                result[1] = CommonConstant.FilterOperators.GREATER_THAN;
+                result[2] = value;
+                return result;
+            } else {
+                throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception ex) {
+            throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
         }
     }
 }
