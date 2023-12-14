@@ -1,5 +1,6 @@
 package com.hendisantika.rediscache.util;
 
+import com.hendisantika.rediscache.exception.CommonApiException;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
