@@ -1,5 +1,6 @@
 package com.hendisantika.rediscache.util;
 
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -208,5 +210,19 @@ public class SpecificationUtil {
             ex.printStackTrace();
             throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private String getEntityKey(Class classEntity, String fieldParam) {
+        String name = null;
+        if (Objects.nonNull(classEntity)) {
+            Field[] fields = classEntity.getDeclaredFields();
+            for (Field field : fields) {
+                if (fieldParam.equalsIgnoreCase(field.getName())) {
+                    return null;
+                }
+                name = field.isAnnotationPresent(EmbeddedId.class) ? field.getName() : name;
+            }
+        }
+        return name;
     }
 }
