@@ -38,9 +38,9 @@ public class ProvinceService {
     private final SpecificationUtil<Province> specificationUtil;
 
     @Transactional(readOnly = true)
-//    @Cacheable(value = "provinceListCache",cacheNames = "provinceListCache", key="#response?.body.id")
+    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache", key = "#response?.body")
 //    @Cacheable(value = "provinceListCache",cacheNames = "provinceListCache", key="#mstProvinceService")
-    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache")
+//    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache")
     public ResponseEntity<BaseResponse<List<ProvinceResponse>>> getAll(
             List<String> filters,
             Integer pageIndex,

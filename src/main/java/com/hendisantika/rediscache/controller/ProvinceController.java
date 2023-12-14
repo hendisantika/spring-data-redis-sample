@@ -29,6 +29,7 @@ public class ProvinceController {
     private final ProvinceService provinceService;
 
     @GetMapping
+//    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache", key="#p0")
     public ResponseEntity<BaseResponse<List<ProvinceResponse>>> getAll(
             @RequestParam(value = "filter", required = false) List<String> filters,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
