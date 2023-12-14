@@ -243,4 +243,19 @@ public class SpecificationUtil {
             return false;
         }
     }
+
+    public String convertParamListIdToString(List<String> list) {
+        if (Objects.nonNull(list)) {
+            int count = 0;
+            StringBuffer sb = new StringBuffer();
+            sb.append("[");
+            for (String valId : list) {
+                sb.append(count > 0 ? "," : "").append(valId);
+                count++;
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        return null;
+    }
 }
