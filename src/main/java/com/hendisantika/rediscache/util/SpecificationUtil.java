@@ -1,5 +1,6 @@
 package com.hendisantika.rediscache.util;
 
+import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -7,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -123,6 +126,33 @@ public class SpecificationUtil {
                 return result;
             } else {
                 throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception ex) {
+            throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private Object parseValue(Root<V> root, String field, Object value, String entityKey) {
+        try {
+            String javaType;
+            if (Objects.nonNull(entityKey)) {
+                javaType = root.get(entityKey).get(field).getJavaType().getSimpleName();
+            } else {
+                javaType = root.get(field).getJavaType().getSimpleName();
+            }
+            if (javaType.equalsIgnoreCase("Integer") && !isNotNullOrIsNull(value) && !isValueIn(value)) {
+                return Integer.parseInt((String) value);
+            } else if (javaType.equalsIgnoreCase("Decimal") && !isNotNullOrIsNull(value) && !isValueIn(value)) {
+                return new BigDecimal(String.valueOf(value));
+            } else if (
+                    (javaType.equalsIgnoreCase("Date")
+                            || javaType.equalsIgnoreCase("Timestamp"))
+                            && !isNotNullOrIsNull(value)
+                            && !isValueIn(value)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                return sdf.parse(String.valueOf(value));
+            } else {
+                return String.valueOf(value);
             }
         } catch (Exception ex) {
             throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
