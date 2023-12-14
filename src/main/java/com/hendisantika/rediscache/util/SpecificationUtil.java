@@ -225,4 +225,13 @@ public class SpecificationUtil {
         }
         return name;
     }
+
+    private boolean isNotNullOrIsNull(Object value) {
+        try {
+            String val = String.valueOf(value);
+            return val.equalsIgnoreCase("isnull") || val.equalsIgnoreCase("isnotnull");
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
