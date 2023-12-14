@@ -1,7 +1,10 @@
 package com.hendisantika.rediscache.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,5 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SpecificationUtil {
-
+    public Specification<V> buildSpecification(List<String> filters) {
+        return buildSpecification(filters, null);
+    }
 }
