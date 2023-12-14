@@ -7,6 +7,7 @@ import com.hendisantika.rediscache.response.BaseResponse;
 import com.hendisantika.rediscache.response.ProvinceResponse;
 import com.hendisantika.rediscache.util.SpecificationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +40,7 @@ public class ProvinceService {
     @Transactional(readOnly = true)
 //    @Cacheable(value = "provinceListCache",cacheNames = "provinceListCache", key="#response?.body.id")
 //    @Cacheable(value = "provinceListCache",cacheNames = "provinceListCache", key="#mstProvinceService")
+    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache")
     public ResponseEntity<BaseResponse<List<ProvinceResponse>>> getAll(
             List<String> filters,
             Integer pageIndex,
