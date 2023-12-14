@@ -1,5 +1,6 @@
 package com.hendisantika.rediscache.entity;
 
+import com.hendisantika.rediscache.request.KabkotaRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
