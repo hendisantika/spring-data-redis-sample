@@ -1,5 +1,8 @@
 package com.hendisantika.rediscache.util;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -155,6 +159,53 @@ public class SpecificationUtil {
                 return String.valueOf(value);
             }
         } catch (Exception ex) {
+            throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private Predicate createPredicate(Root<V> root, CriteriaBuilder cb, String field, String operator, String val, String entityKey) {
+        try {
+            Object value = parseValue(root, field, val, entityKey);
+            Expression fieldEntity;
+            if (Objects.nonNull(entityKey)) {
+                fieldEntity = root.get(entityKey).get(field);
+            } else {
+                fieldEntity = root.get(field);
+            }
+            switch (operator) {
+                case CommonConstant.FilterOperators.FILTER_EQUALS:
+                    if (val.toLowerCase().contains("isnull")) {
+                        return cb.isNull(fieldEntity);
+                    } else if (val.toLowerCase().contains("isnotnull")) {
+                        return cb.isNotNull(fieldEntity);
+                    } else {
+                        return (value instanceof Date)
+                                ? cb.equal(fieldEntity.as(Date.class), value)
+                                : cb.equal(cb.toString(fieldEntity), String.valueOf(value));
+                    }
+                case CommonConstant.FilterOperators.LIKE:
+                    return cb.like(cb.upper(fieldEntity), String.valueOf(value).toUpperCase());
+                case CommonConstant.FilterOperators.IN:
+                    int startIndex = val.indexOf("[");
+                    int endIndex = val.indexOf("]");
+                    String valuesString = val.substring(startIndex + 1, endIndex);
+                    String[] array = valuesString.split(",\\s*");
+                    return fieldEntity.in(array);
+                case CommonConstant.FilterOperators.NOT_EQUALS:
+                    return cb.notEqual(fieldEntity, value);
+                case CommonConstant.FilterOperators.GREATER_THAN:
+                    return cb.greaterThan(fieldEntity, (Comparable) value);
+                case CommonConstant.FilterOperators.LESS_THAN:
+                    return cb.lessThan(fieldEntity, (Comparable) value);
+                case CommonConstant.FilterOperators.GREATER_THAN_OR_EQUALS:
+                    return cb.greaterThanOrEqualTo(fieldEntity, (Comparable) value);
+                case CommonConstant.FilterOperators.LESS_THAN_OR_EQUALS:
+                    return cb.lessThanOrEqualTo(fieldEntity, (Comparable) value);
+                default:
+                    throw new IllegalArgumentException("Operator not supported: " + operator);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
             throw new CommonApiException(CommonConstant.CommonExceptionMessage.FILTER_INVALID_FORMAT, HttpStatus.BAD_REQUEST);
         }
     }
