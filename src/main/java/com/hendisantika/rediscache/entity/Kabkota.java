@@ -71,11 +71,11 @@ public class Kabkota {
     @JoinColumn(name = "city_prov_id", insertable = false, updatable = false)
     private Province province;
 
-    public KabkotaEntity(KabkotaRequest model) {
+    public Kabkota(KabkotaRequest model) {
         BeanUtils.copyProperties(model, this);
     }
 
-    public KabkotaEntity(KabkotaRequest model, Integer provId) {
+    public Kabkota(KabkotaRequest model, Integer provId) {
         BeanUtils.copyProperties(model, this);
         this.cityProvId = provId;
     }
