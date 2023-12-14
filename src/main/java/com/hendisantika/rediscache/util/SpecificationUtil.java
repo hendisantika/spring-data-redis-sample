@@ -234,4 +234,13 @@ public class SpecificationUtil {
             return false;
         }
     }
+
+    private boolean isValueIn(Object value) {
+        try {
+            String val = String.valueOf(value);
+            return val.startsWith("[");
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
