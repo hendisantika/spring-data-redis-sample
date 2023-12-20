@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +37,12 @@ public class ProvinceService {
     private final SpecificationUtil<Province> specificationUtil;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache", key = "#response?.body")
+    @Cacheable(value = "provinceListCache")
+//    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache", key = "#response?.body")
 //    @Cacheable(value = "provinceListCache",cacheNames = "provinceListCache", key="#mstProvinceService")
 //    @Cacheable(value = "provinceListCache", cacheNames = "provinceListCache")
-    public ResponseEntity<BaseResponse<List<ProvinceResponse>>> getAll(
+//    public ResponseEntity<BaseResponse<List<ProvinceResponse>>> getAll(
+    public BaseResponse<List<ProvinceResponse>> getAll(
             List<String> filters,
             Integer pageIndex,
             Integer pageSize
@@ -62,7 +63,7 @@ public class ProvinceService {
                     .map(ProvinceResponse::new)
                     .toList();
         }
-        var response = BaseResponse.<List<ProvinceResponse>>builder()
+        return BaseResponse.<List<ProvinceResponse>>builder()
                 .timestamp(new Date())
                 .data(dataList)
                 .statusCode(HttpStatus.OK.value())
@@ -72,6 +73,6 @@ public class ProvinceService {
                 .ttlPages(pageResult.getTotalPages())
                 .ttlRecords((int) pageResult.getTotalElements())
                 .build();
-        return ResponseEntity.ok(response);
+//        return ResponseEntity.ok(response);
     }
 }

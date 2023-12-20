@@ -1,5 +1,6 @@
 package com.hendisantika.rediscache.response;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class BaseResponse<T> implements Serializable {
+    private static final long serialVersionUID = 4L;
     private Date timestamp;
     private Integer statusCode;
     private String error;
@@ -32,4 +34,20 @@ public class BaseResponse<T> implements Serializable {
     private int pageNo;
     private int pageRecords;
     private T data;
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return "{" +
+                "timestamp: " + "\"" + timestamp + "\"" +
+                ", statusCode:" + statusCode +
+                ", error:" + "\"" + error + "\"" +
+                ", message:" + "\"" + message + "\"" +
+                ", ttlRecords:" + ttlRecords +
+                ", ttlPages:" + ttlPages +
+                ", pageNo:" + pageNo +
+                ", pageRecords:" + pageRecords +
+                ", data:" + gson.toJson(data) +
+                '}';
+    }
 }

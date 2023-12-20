@@ -1,6 +1,7 @@
 package com.hendisantika.rediscache.controller;
 
 import com.hendisantika.rediscache.entity.User;
+import com.hendisantika.rediscache.repository.UserRedisRepository;
 import com.hendisantika.rediscache.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRedisRepository userRedisRepository;
+
     @GetMapping(value = "{userId}")
     public User getUser(@PathVariable("userId") Long userId) throws Exception {
         LOGGER.debug("Get User Request...");
@@ -40,7 +43,6 @@ public class UserController {
                                   @RequestParam(defaultValue = "100") int size,
                                   @RequestParam(defaultValue = "id,desc") String[] sort) {
         LOGGER.debug("Get All Users Request...");
-        //create pagerequest object
         PageRequest pageRequest = PageRequest.of(page, size);
         //pass it to repos
 //        Page<User> pagingUser = userService.getAllUsers(pageRequest);
@@ -48,5 +50,15 @@ public class UserController {
         //pagingUser.hasContent(); -- to check pages are there or not
 //        return pagingUser.getContent();
     }
+
+//    @PostMapping("/redis/add")
+//    public User addNewUser(@RequestBody User user){
+//        UserRepository userRepository = new UserRepository(redisTemplate());
+//
+//        userRedisRepository.create(new User("1", "username", "emailid"));
+//        User newUser = userRedisRepository.get("1");
+//        userRedisRepository.update(user);
+//        userRedisRepository.delete(user.getUserId());
+//    }
 
 }
